@@ -9,9 +9,9 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"picker_window_position_offset.00000000" = "-1955;-79;320;550"
+	"picker_window_position_offset.00000000" = "-1345;78;320;550"
 	"picker_visibility_flags.00000000" = "0"
-	"picker_item_size.00000000" = "1"
+	"picker_item_size.00000000" = "32"
 	"picker_inspector.00000000" = "0"
 }
 providers = {
@@ -71,6 +71,11 @@ objectSelectors = {
 recentSearches = [
 ]
 searchItemFavorites = [
+	"50066"
+	"50076"
+	"50080"
+	"50004"
+	"49990"
 ]
 savedSearchesSortOrder = 0
 showSavedSearchPanel = false
