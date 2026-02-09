@@ -32,6 +32,7 @@ public class MagnifierLens : MonoBehaviour
 
         Vector3 posDiff = pos2-pos1;
         rot.SetLookRotation(posDiff);
+        rot.eulerAngles = new Vector3(rot.eulerAngles.x, rot.eulerAngles.y, -rot.eulerAngles.z);
 
         lensCamera.transform.SetPositionAndRotation(pos2+posDiff, rot);
         //transform.SetPositionAndRotation(pos2, rot);
