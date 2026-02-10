@@ -35,7 +35,8 @@ public class MagnifierLens : MonoBehaviour
         rot.SetLookRotation(posDiff);
         rot.eulerAngles = new Vector3(rot.eulerAngles.x, rot.eulerAngles.y, -rot.eulerAngles.z+z);
 
-        lensCamera.transform.SetPositionAndRotation(pos2+posDiff, rot);
+        lensCamera.transform.SetPositionAndRotation(pos2, rot); // +posDiff
+        lensCamera.fieldOfView = playerCamera.fieldOfView*(1/(posDiff.magnitude+1)) * 0.8f;
         //transform.SetPositionAndRotation(pos2, rot);
     }
 }
