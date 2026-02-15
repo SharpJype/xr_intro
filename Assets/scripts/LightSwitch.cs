@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class LightSwitch : MonoBehaviour
 {
-    public Light light;
+    public Light targetLight;
     public InputActionReference action;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,13 +12,13 @@ public class LightSwitch : MonoBehaviour
         action.action.Enable();
         action.action.performed += (ctx) =>
         {
-            if (light.color==Color.red)
+            if (targetLight.color==Color.red)
             {
-                light.color = Color.white;
+                targetLight.color = Color.white;
             }
             else
             {
-                light.color = Color.red;
+                targetLight.color = Color.red;
             }
         };
     }

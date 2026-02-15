@@ -4,30 +4,33 @@ public class GameObjectDuplicator : MonoBehaviour
 {
 
     public GameObject prefab;
-    public int objectArrayWidth = 10;
-    public int objectArrayHeight = 1;
-    public int objectArrayDepth = 10;
-    public float objectXStep = 1.0f;
-    public float objectYStep = 1.0f;
-    public float objectZStep = 1.0f;
+
+    public Vector3Int arrayShape;
+    public Vector3 arrayStep;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (arrayShape.x==0) arrayShape.x = 1;
+        if (arrayShape.y==0) arrayShape.y = 1;
+        if (arrayShape.z==0) arrayShape.z = 1;
         Vector3 newPosition = prefab.transform.position;
-        for (int i=0; i<objectArrayWidth;i++)
+        for (int i=0; i<arrayShape.x;i++)
         {
-            for (int j=0; j<objectArrayHeight;j++)
+            for (int j=0; j<arrayShape.y;j++)
             {
-                for (int h=0; h<objectArrayDepth;h++)
+                for (int h=0; h<arrayShape.z;h++)
                 {
-                    GameObject newObj = Instantiate(prefab, newPosition, prefab.transform.rotation);
-                    newObj.transform.parent = this.transform;
-                    newPosition.z += objectZStep;
+                    if ((i+j+h)>0)
+                    {
+                        GameObject newObj = Instantiate(prefab, newPosition, prefab.transform.rotation);
+                        newObj.transform.parent = this.transform;
+                    }
+                    newPosition.z += arrayStep.z;
                 }
-                newPosition.y += objectYStep;
+                newPosition.y += arrayStep.y;
                 newPosition.z = prefab.transform.position.z;
             }
-            newPosition.x += objectXStep;
+            newPosition.x += arrayStep.x;
             newPosition.y = prefab.transform.position.y;
         }
         
