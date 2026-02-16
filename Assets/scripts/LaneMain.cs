@@ -5,7 +5,7 @@ using UnityEngine;
 public class LaneMain : MonoBehaviour
 {
     public enum State {Ready=0,Score,Scoring,Reload,Reloading,ReloadDone};
-    public State laneState;
+    public State laneState = State.Reload;
     
 
     private List<int> scores;
@@ -76,7 +76,9 @@ public class LaneMain : MonoBehaviour
     private IEnumerator ReloadingWaiter()
     {
         print("reloading");
-        pins.ResetPins();
+        pins.ClearPins();
+        yield return new WaitForSeconds(intervalSeconds);
+        pins.SpawnPins();
         yield return new WaitForSeconds(1f);
         laneState = State.ReloadDone;
     }

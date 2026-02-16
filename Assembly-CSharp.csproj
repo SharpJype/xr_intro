@@ -62,7 +62,6 @@
     <Compile Include="Assets\scripts\ApplyForce.cs" />
     <Compile Include="Assets\scripts\GameObjectDuplicator.cs" />
     <Compile Include="Assets\scripts\LaneGutter.cs" />
-    <Compile Include="Assets\scripts\LaneAntiGutter.cs" />
     <Compile Include="Assets\scripts\CanGrab.cs" />
     <Compile Include="Assets\scripts\QuitScript.cs" />
   </ItemGroup>

@@ -16,7 +16,7 @@ public class LanePins : MonoBehaviour
     {
         pins = new List<LanePin>();
         felledPins = new List<LanePin>();
-        SpawnPins();
+        //SpawnPins();
     }
 
     void OnTriggerEnter(Collider other)
@@ -67,6 +67,7 @@ public class LanePins : MonoBehaviour
             for (int j=0; j<rowWidth; j++)
             {
                 LanePin newObj = Instantiate(prefab);
+                newObj.transform.parent = this.transform;
                 pins.Add(newObj);
                 newObj.transform.position = main.transform.rotation*runningPosition;
                 newObj.transform.rotation = main.transform.rotation;
