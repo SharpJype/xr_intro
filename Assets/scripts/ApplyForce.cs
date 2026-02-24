@@ -2,17 +2,23 @@ using UnityEngine;
 
 public class ApplyForce : MonoBehaviour
 {
-
     public Vector3 applyPulseForce;
     public Vector3 applyConstantForce;
 
     public Vector3 applyPulseTorque;
     public Vector3 applyConstantTorque;
 
+    public float startDeviation = 0f;
+
     private Rigidbody rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        applyPulseForce += applyPulseForce*Random.Range(-startDeviation,startDeviation);
+        applyPulseTorque += applyPulseTorque*Random.Range(-startDeviation,startDeviation);
+        applyConstantForce += applyConstantForce*Random.Range(-startDeviation,startDeviation);
+        applyConstantTorque += applyConstantTorque*Random.Range(-startDeviation,startDeviation);
+
         rb = GetComponent<Rigidbody>();
 
         rb.AddRelativeForce(Quaternion.Inverse(transform.rotation)*applyPulseForce);

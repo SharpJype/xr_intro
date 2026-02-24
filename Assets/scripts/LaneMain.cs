@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
 public class LaneMain : MonoBehaviour
 {
-    public enum State {Ready=0,Score,Scoring,Cleaning,Reload,Reloading,ReloadDone};
-    public State laneState = State.Reload;
+    public enum State {Ready=0,Score,Scoring,Cleaning,Reloading,ReloadDone};
+    public State laneState = State.Ready;
     
     private List<int> frameScores;
     private int frameScore = 0; // points scored this frame
@@ -15,14 +13,17 @@ public class LaneMain : MonoBehaviour
     private List<int> frameResults; // 0/1/2 == open/spare/strike
 
     public int gameLength = 5;
+    public int attemptsPerFrame = 2;
 
-    private float movementThreshold = 0.5f;
+    private float movementThreshold = 0.2f;
 
     private LanePins pins;
     public float intervalSeconds = 3f;
     Coroutine waiter;
 
     public LaneScoreText scoreText;
+    public LaneScoreText resultText;
+    public LaneScoreText currentScoreText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,6 +36,7 @@ public class LaneMain : MonoBehaviour
             if (c != this)
                 pins = c;
         }
+        
     }
 
     // Update is called once per frame
@@ -43,18 +45,18 @@ public class LaneMain : MonoBehaviour
         bool movingPins = pins.PinsAreMoving(movementThreshold);
         if (laneState==State.Ready)
         {
-            if (movingPins) laneState = State.Score;
+            if (pins.IsEmpty()) StartReloading();
+            else if (movingPins) laneState = State.Score;
         }
         else if (laneState==State.Score)
         {
             if (!movingPins) StartScoring();
         }
-        else if (laneState==State.Reload) StartReloading();
         else if (laneState==State.ReloadDone)
         {
             if (!movingPins)
             {
-                BeforeReady();
+                CheckGameFinish();
                 laneState = State.Ready;
             }
         }
@@ -65,19 +67,12 @@ public class LaneMain : MonoBehaviour
         return laneState==State.Ready;
     }
 
-    private void BeforeReady()
+    private void CheckGameFinish()
     {
         if (frameResults.Count>=gameLength)
         {
-            // show end results & reset game
-            string s = "";
-            for(int i=0; i<frameResults.Count; i++)
-            {
-                s += string.Format("{0}. [{1} - {2}]\n", i+1, frameScores[i], frameResults[i]);
-            }
-            //print(s);
-            scoreText.ShowEndResults(frameScores, frameResults);
-            GameReset();
+            resultText.ShowEndResults(frameScores, frameResults);
+            ResetGame();
         }
     }
 
@@ -92,11 +87,10 @@ public class LaneMain : MonoBehaviour
     private IEnumerator ScoringWaiter()
     {
         //print("scoring");
-        scoreText.UpdateScores(frameScores, frameScore);
+        scoreText.UpdateScores(frameScores, frameResults);
         yield return new WaitForSeconds(intervalSeconds);
         
-        int score = pins.CurrentScore();
-        frameScore += score;
+        frameScore += pins.CurrentScore();
         frameThrowsLeft -= 1;
         
         if (pins.RemainingScore()==0) // strike or spare
@@ -104,8 +98,8 @@ public class LaneMain : MonoBehaviour
             bool doExtraThrow = (frameScores.Count>0) & (frameScores.Count%10)==0;
             doExtraThrow &= frameThrowsLeft>0;
 
-            if (frameThrowsLeft>0) frameResults.Add(1); // spare
-            else frameResults.Add(2); // strike
+            if (frameThrowsLeft<(attemptsPerFrame-1)) NextFrame(1); // spare
+            else NextFrame(2); // strike
             /*
             if (doExtraThrow)
             {
@@ -114,17 +108,12 @@ public class LaneMain : MonoBehaviour
             }
             else NextFrame();
             */
-            NextFrame();
         }
         else if (frameThrowsLeft>0) StartCleaning();
-        else // open frame
-        {
-            frameResults.Add(0);
-            NextFrame();
-        }
-
+        else NextFrame(0); // open frame
         
-        scoreText.UpdateScores(frameScores, frameScore);
+        currentScoreText.SetText($"{frameScore}");
+        scoreText.UpdateScores(frameScores, frameResults);
     }
 
 
@@ -136,7 +125,7 @@ public class LaneMain : MonoBehaviour
     }
     private IEnumerator ReloadingWaiter()
     {
-        //print("reloading");
+        print("reloading");
         pins.ClearPins();
         yield return new WaitForSeconds(intervalSeconds);
         pins.SpawnPins();
@@ -159,11 +148,24 @@ public class LaneMain : MonoBehaviour
     }
 
 
-    public void NextFrame()
+    public void NextFrame(int result=0)
+    {
+        frameResults.Add(result);
+        frameScores.Add(frameScore);
+        ExtraStrikeSpareScoring();
+        ResetFrame();
+    }
+
+    private void ResetFrame()
     {
         StartReloading();
-        frameScores.Add(frameScore);
+        frameScore = 0;
+        currentScoreText.SetText("-");
+        frameThrowsLeft = attemptsPerFrame;
+    }
 
+    void ExtraStrikeSpareScoring()
+    {
         if (frameScores.Count>2) // strike score bonus to two turns before
         {
             if (frameResults[frameResults.Count-3]==2) frameScores[frameScores.Count-3] += frameScore;
@@ -172,26 +174,13 @@ public class LaneMain : MonoBehaviour
         {
             if (frameResults[frameResults.Count-2]!=0) frameScores[frameScores.Count-2] += frameScore;
         }
-
-        frameScore = 0;
-        frameThrowsLeft = 2;
     }
 
-    /*void ExtraFrame()
+    public void ResetGame()
     {
-        StartReloading();
-        if (frameThrowsLeft>1) frameThrowsLeft = 1;
-        else frameThrowsLeft = 2;
-        frameScore = 0;
-    }*/
-
-    public void GameReset()
-    {
-        StartReloading();
         frameScores.Clear();
         frameResults.Clear();
-        frameScore = 0;
-        frameThrowsLeft = 2;
+        ResetFrame();
     }
 
 

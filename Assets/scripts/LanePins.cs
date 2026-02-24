@@ -33,6 +33,7 @@ public class LanePins : MonoBehaviour
     {
         foreach(LanePin pin in pins)
         {
+            if (pin.felled) continue; // ignore out of bounds pins
             if (pin.rb.linearVelocity.magnitude>threshold) return true;
         }
         return false;
@@ -102,7 +103,10 @@ public class LanePins : MonoBehaviour
         SpawnPins();
     }
 
-
+    public bool IsEmpty()
+    {
+        return pins.Count==0;
+    }
     
     void FindLaneMain()
     {
