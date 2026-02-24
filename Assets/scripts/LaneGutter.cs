@@ -2,17 +2,13 @@ using UnityEngine;
 
 public class LaneGutter : MonoBehaviour
 {
-    public LaneMain main;
-
-    public GameObject ball;
-
-    private Vector3 ballReturnPosition;
+    private LaneMain main;
 
     public bool antiGutter = false;
 
     void Start()
     {
-        ballReturnPosition = ball.transform.position;
+        FindLaneMain();
     }
 
     void GutterInteraction(Collider other)
@@ -21,7 +17,7 @@ public class LaneGutter : MonoBehaviour
         if (x)
         {
             if (main.IsReady()) main.StartScoring();
-            x.transform.position = ballReturnPosition;
+            x.transform.position = x.GetReturnPosition();
             Rigidbody rigidbody = x.GetComponent<Rigidbody>();
             rigidbody.linearVelocity *= 0;
             rigidbody.angularVelocity *= 0;
@@ -35,5 +31,19 @@ public class LaneGutter : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         if (antiGutter) GutterInteraction(other);
+        
+    }
+
+
+
+    void FindLaneMain()
+    {
+        GameObject obj = this.gameObject;
+        while (obj.transform.parent)
+        {
+            obj = obj.transform.parent.gameObject;
+            main = obj.GetComponent<LaneMain>();
+            if (main) break;
+        }
     }
 }

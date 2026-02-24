@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,9 +19,13 @@ public class CustomGrab : MonoBehaviour
     private Vector3 deltaPos;
     private Quaternion deltaRot;
 
+    private List<Vector3> velocityStorage;
+
     private void Start()
     {
         action.action.Enable();
+
+        velocityStorage = new List<Vector3>();
 
         // Find the other hand
         foreach(CustomGrab c in transform.parent.GetComponentsInChildren<CustomGrab>())
@@ -38,7 +42,7 @@ public class CustomGrab : MonoBehaviour
             // Grab nearby object or the object in the other hand
             if (!grabbedObject)
                 grabbedObject = nearObjects.Count > 0 ? nearObjects[0] : otherHand.grabbedObject;
-                grabbedObject.gameObject.GetComponent<Rigidbody>().useGravity = false;
+                if (grabbedObject & !otherHand.grabbedObject) DisablePhysics();
 
             if (grabbedObject)
             {
@@ -55,15 +59,18 @@ public class CustomGrab : MonoBehaviour
                 grabbedObject.position += deltaPos;
 
                 grabbedObject.rotation = deltaRot * grabbedObject.rotation;
+
+                if (velocityStorage.Count>9) velocityStorage.RemoveAt(0);
+                velocityStorage.Add(deltaPos/Time.deltaTime);
             }
         }
         // If let go of button, release object
         else if (grabbedObject)
         {
-            if (!otherHand.grabbedObject)
-                grabbedObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
+            if (!otherHand.grabbedObject) EnablePhysics();
             
             grabbedObject = null;
+            velocityStorage.Clear();
         }
 
         // Should save the current position and rotation here
@@ -89,5 +96,38 @@ public class CustomGrab : MonoBehaviour
         Transform t = other.transform;
         if( t && t.tag.ToLower()=="grabbable")
             nearObjects.Remove(t);
+    }
+
+
+    void DisablePhysics()
+    {
+        Rigidbody rigidbody = grabbedObject.gameObject.GetComponent<Rigidbody>();
+        rigidbody.useGravity = false;
+        //rigidbody.isKinematic = false;
+        rigidbody.linearVelocity *= 0;
+        rigidbody.angularVelocity *= 0;
+    }
+    void EnablePhysics()
+    {
+        //grabNormal = grabbedObject.position - transform.position;
+        deltaPos = transform.position - prevPosition;
+        deltaRot = transform.rotation * Quaternion.Inverse(prevRotation);
+
+        Rigidbody rigidbody = grabbedObject.gameObject.GetComponent<Rigidbody>();
+        rigidbody.useGravity = true;
+        //rigidbody.isKinematic = true;
+        
+        //rigidbody.linearVelocity = (deltaRot * grabNormal) - grabNormal + deltaPos;
+
+        Vector3 meanVelocity = new Vector3();
+        if (velocityStorage.Count>0)
+        {
+            foreach(Vector3 v in velocityStorage) meanVelocity += v;
+            meanVelocity /= velocityStorage.Count;
+        }
+        meanVelocity += deltaPos/Time.deltaTime;
+        rigidbody.linearVelocity = meanVelocity;
+
+        //rigidbody.angularVelocity = deltaRot * new Vector3(1, 1, 1) / Time.deltaTime;
     }
 }

@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class LanePins : MonoBehaviour
 {
-    public LaneMain main;
+    private LaneMain main;
     private List<LanePin> pins;
-    private List<LanePin> felledPins;
 
     public LanePin prefab;
     public int pinRows = 4;
@@ -14,31 +13,27 @@ public class LanePins : MonoBehaviour
 
     void Start()
     {
+        FindLaneMain();
         pins = new List<LanePin>();
-        felledPins = new List<LanePin>();
-        //SpawnPins();
     }
 
     void OnTriggerEnter(Collider other)
     {
         LanePin pin = other.GetComponent<LanePin>();
-        if (pin) pins.Add(pin);
+        if (pin) pin.felled = false;
     }
 
     void OnTriggerExit(Collider other)
     {
         LanePin pin = other.GetComponent<LanePin>();
-        if (pin)
-        {
-            if (pins.Remove(pin)) felledPins.Add(pin);
-        }
+        if (pin) pin.felled = true;
     }
 
     public bool PinsAreMoving(float threshold)
     {
         foreach(LanePin pin in pins)
         {
-            if (pin.rigidbody.linearVelocity.magnitude>threshold) return true;
+            if (pin.rb.linearVelocity.magnitude>threshold) return true;
         }
         return false;
     }
@@ -46,7 +41,20 @@ public class LanePins : MonoBehaviour
     public int CurrentScore()
     {
         int score = 0;
-        foreach(LanePin pin in felledPins) score += pin.value;
+        foreach(LanePin pin in pins) 
+        {
+            if (pin.felled) score += pin.points;
+        }
+        return score;
+    }
+
+    public int RemainingScore()
+    {
+        int score = 0;
+        foreach(LanePin pin in pins)
+        {
+            if (!pin.felled) score += pin.points;
+        }
         return score;
     }
 
@@ -54,8 +62,16 @@ public class LanePins : MonoBehaviour
     {
         foreach(LanePin pin in pins) Destroy(pin.gameObject);
         pins.Clear();
-        foreach(LanePin pin in felledPins) Destroy(pin.gameObject);
-        felledPins.Clear();
+    }
+    public void ClearFelledPins()
+    {
+        List<LanePin> newPins = new List<LanePin>();
+        foreach(LanePin pin in pins)
+        {
+            if (pin.felled) Destroy(pin.gameObject);
+            else newPins.Add(pin);
+        }
+        pins = newPins;
     }
 
     public void SpawnPins()
@@ -84,6 +100,19 @@ public class LanePins : MonoBehaviour
     {
         ClearPins();
         SpawnPins();
+    }
+
+
+    
+    void FindLaneMain()
+    {
+        GameObject obj = this.gameObject;
+        while (obj.transform.parent)
+        {
+            obj = obj.transform.parent.gameObject;
+            main = obj.GetComponent<LaneMain>();
+            if (main) break;
+        }
     }
 
 }

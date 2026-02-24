@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class LanePin : MonoBehaviour
 {
-    public int value = 1;
+    public int points = 1;
+    public bool felled = false;
 
-    public Rigidbody rigidbody;
+    public Rigidbody rb;
 
     void Start()
     {
-        if (!rigidbody) rigidbody = GetComponent<Rigidbody>();
+        if (!rb) rb = GetComponent<Rigidbody>();
     }
 }

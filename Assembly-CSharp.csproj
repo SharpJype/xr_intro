@@ -54,6 +54,7 @@
     <Compile Include="Assets\scripts\LaneMain.cs" />
     <Compile Include="Assets\scripts\LanePins.cs" />
     <Compile Include="Assets\scripts\LaneReturnable.cs" />
+    <Compile Include="Assets\scripts\PlayerCamera.cs" />
     <Compile Include="Assets\scripts\CustomGrab.cs" />
     <Compile Include="Assets\scripts\GrabObjects.cs" />
     <Compile Include="Assets\scripts\MagnifierLens.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Assets\scripts\ConstantRotate.cs" />
     <Compile Include="Assets\scripts\ApplyForce.cs" />
     <Compile Include="Assets\scripts\GameObjectDuplicator.cs" />
+    <Compile Include="Assets\scripts\LaneScoreText.cs" />
     <Compile Include="Assets\scripts\LaneGutter.cs" />
     <Compile Include="Assets\scripts\CanGrab.cs" />
     <Compile Include="Assets\scripts\QuitScript.cs" />

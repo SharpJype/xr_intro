@@ -9,14 +9,14 @@ public class ApplyForce : MonoBehaviour
     public Vector3 applyPulseTorque;
     public Vector3 applyConstantTorque;
 
-    private Rigidbody rigidbody;
+    private Rigidbody rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
-        rigidbody.AddRelativeForce(Quaternion.Inverse(transform.rotation)*applyPulseForce);
-        rigidbody.AddRelativeTorque(Quaternion.Inverse(transform.rotation)*applyPulseTorque);
+        rb.AddRelativeForce(Quaternion.Inverse(transform.rotation)*applyPulseForce);
+        rb.AddRelativeTorque(Quaternion.Inverse(transform.rotation)*applyPulseTorque);
     }
 
     // Update is called once per frame
@@ -24,11 +24,11 @@ public class ApplyForce : MonoBehaviour
     {
         if (applyConstantForce.magnitude>0)
         {
-            rigidbody.AddRelativeForce(Quaternion.Inverse(transform.rotation)*applyConstantForce*Time.deltaTime);
+            rb.AddRelativeForce(Quaternion.Inverse(transform.rotation)*applyConstantForce*Time.deltaTime);
         }
         if (applyConstantTorque.magnitude>0)
         {
-            rigidbody.AddRelativeTorque(Quaternion.Inverse(transform.rotation)*applyConstantTorque*Time.deltaTime);
+            rb.AddRelativeTorque(Quaternion.Inverse(transform.rotation)*applyConstantTorque*Time.deltaTime);
         }
     }
 }
