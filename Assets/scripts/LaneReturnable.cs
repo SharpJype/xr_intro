@@ -3,6 +3,7 @@ using UnityEngine;
 public class LaneReturnable : MonoBehaviour
 {
     private Vector3 returnPosition;
+    public bool targetedByGutter = false;
 
     void Start()
     {

@@ -542,6 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneGutter
   antiGutter: 0
+  gutterDelay: 0
 --- !u!65 &69522090
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -958,6 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df87dfc40cb2ab4ab5693a1772a6bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneReturnable
+  targetedByGutter: 0
 --- !u!1 &286643098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,6 +1498,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452618610}
   m_CullTransparentMesh: 1
+--- !u!1 &459022558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2198055888976155094, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+  m_PrefabInstance: {fileID: 2127879930}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &459022560
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459022558}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.005
+  m_Center: {x: -0.002, y: -0.02, z: 0.007}
 --- !u!1 &461390335
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,6 +4285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneGutter
   antiGutter: 0
+  gutterDelay: 0
 --- !u!65 &1130472562
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4461,6 +4490,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202639675}
   m_CullTransparentMesh: 1
+--- !u!1 &1302716413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2198055888976155094, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+  m_PrefabInstance: {fileID: 1591707236}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &1302716415
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302716413}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.005
+  m_Center: {x: -0.002, y: -0.02, z: 0.007}
 --- !u!1 &1302955559
 GameObject:
   m_ObjectHideFlags: 0
@@ -4734,7 +4789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneMain
   laneState: 0
-  gameLength: 3
+  gameLength: 10
   attemptsPerFrame: 2
   intervalSeconds: 2
   scoreText: {fileID: 991029472}
@@ -6008,6 +6063,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1591707239}
+    - targetCorrespondingSourceObject: {fileID: 2198055888976155094, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1302716415}
   m_SourcePrefab: {fileID: 100100000, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
 --- !u!4 &1591707237 stripped
 Transform:
@@ -6453,6 +6511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneAntiGutter
   antiGutter: 1
+  gutterDelay: 0
 --- !u!114 &1650685046 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1178791450436251564, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -6478,6 +6537,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: e0ca4504471ca124088e1e2cfe6804ae, type: 3}
   m_ActionId: f17f4516-fcdf-4891-9411-fee4983cd798
+--- !u!1 &1697896640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1697896641}
+  - component: {fileID: 1697896643}
+  - component: {fileID: 1697896642}
+  m_Layer: 0
+  m_Name: BallRecovery
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1697896641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697896640}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.3, z: 8.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2035308076}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1697896642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697896640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a21ae928c8392142b0cbbc1decfa861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LaneGutter
+  antiGutter: 0
+  gutterDelay: 5
+--- !u!65 &1697896643
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697896640}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.5, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1720804090
 GameObject:
   m_ObjectHideFlags: 0
@@ -8036,6 +8163,7 @@ Transform:
   - {fileID: 1130472560}
   - {fileID: 69522088}
   - {fileID: 194507986}
+  - {fileID: 1697896641}
   m_Father: {fileID: 1310920901}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2037420075
@@ -8116,6 +8244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaneGutter
   antiGutter: 0
+  gutterDelay: 0
 --- !u!65 &2043367212
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8642,6 +8771,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1392595203298398570, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392595203298398570, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392595203298398570, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392595203298398570, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8652,6 +8797,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2127879934}
+    - targetCorrespondingSourceObject: {fileID: 2198055888976155094, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 459022560}
   m_SourcePrefab: {fileID: 100100000, guid: 22c57f81439e3bf4092fc11e48e47b81, type: 3}
 --- !u!4 &2127879931 stripped
 Transform:

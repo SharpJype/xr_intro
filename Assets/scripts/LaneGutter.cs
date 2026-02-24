@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.Collections;
 using UnityEngine;
 
 public class LaneGutter : MonoBehaviour
@@ -5,6 +7,9 @@ public class LaneGutter : MonoBehaviour
     private LaneMain main;
 
     public bool antiGutter = false;
+
+    public float gutterDelay = 0f;
+    Coroutine waiter;
 
     void Start()
     {
@@ -16,6 +21,7 @@ public class LaneGutter : MonoBehaviour
         LaneReturnable x = other.GetComponent<LaneReturnable>();
         if (x)
         {
+            x.targetedByGutter = false;
             if (main.IsReady()) main.StartScoring();
             x.transform.position = x.GetReturnPosition();
             Rigidbody rigidbody = x.GetComponent<Rigidbody>();
@@ -25,12 +31,21 @@ public class LaneGutter : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (!antiGutter) GutterInteraction(other);
+        
+        if (!antiGutter)
+        {
+            if (gutterDelay>0f) StartDelayedGutter(other);
+            else GutterInteraction(other);
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (antiGutter) GutterInteraction(other);
+        if (antiGutter) 
+        {
+            if (gutterDelay>0f) StartDelayedGutter(other);
+            else GutterInteraction(other);
+        }
         
     }
 
@@ -46,4 +61,30 @@ public class LaneGutter : MonoBehaviour
             if (main) break;
         }
     }
+
+
+    
+    public void StartDelayedGutter(Collider other)
+    {
+        LaneReturnable x = other.GetComponent<LaneReturnable>();
+        if (x)
+        {
+            if (x.targetedByGutter) return;
+            x.targetedByGutter = true;
+        }
+        else return;
+        
+        if (waiter!=null) StopCoroutine(waiter); // stop old one if running
+        waiter = StartCoroutine(GutterWaiter(other)); // start waiting
+    }
+    private IEnumerator GutterWaiter(Collider other)
+    {
+        yield return new WaitForSeconds(gutterDelay);
+        LaneReturnable x = other.GetComponent<LaneReturnable>();
+        if (x)
+        {
+            if (x.targetedByGutter) GutterInteraction(other);
+        }
+    }
+
 }

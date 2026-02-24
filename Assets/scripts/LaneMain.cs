@@ -95,8 +95,8 @@ public class LaneMain : MonoBehaviour
         
         if (pins.RemainingScore()==0) // strike or spare
         {
-            bool doExtraThrow = (frameScores.Count>0) & (frameScores.Count%10)==0;
-            doExtraThrow &= frameThrowsLeft>0;
+            //bool doExtraThrow = (frameScores.Count>0) & (frameScores.Count%10)==0;
+            //doExtraThrow &= frameThrowsLeft>0;
 
             if (frameThrowsLeft<(attemptsPerFrame-1)) NextFrame(1); // spare
             else NextFrame(2); // strike
@@ -109,11 +109,12 @@ public class LaneMain : MonoBehaviour
             else NextFrame();
             */
         }
-        else if (frameThrowsLeft>0) StartCleaning();
+        else if (frameThrowsLeft>0)
+        {
+            StartCleaning();
+            UpdateScoreboard();
+        }
         else NextFrame(0); // open frame
-        
-        currentScoreText.SetText($"{frameScore}");
-        scoreText.UpdateScores(frameScores, frameResults);
     }
 
 
@@ -125,7 +126,7 @@ public class LaneMain : MonoBehaviour
     }
     private IEnumerator ReloadingWaiter()
     {
-        print("reloading");
+        //print("reloading");
         pins.ClearPins();
         yield return new WaitForSeconds(intervalSeconds);
         pins.SpawnPins();
@@ -153,7 +154,14 @@ public class LaneMain : MonoBehaviour
         frameResults.Add(result);
         frameScores.Add(frameScore);
         ExtraStrikeSpareScoring();
+        UpdateScoreboard();
         ResetFrame();
+    }
+
+    void UpdateScoreboard()
+    {
+        currentScoreText.SetText($"{frameScore}");
+        scoreText.UpdateScores(frameScores, frameResults);
     }
 
     private void ResetFrame()
@@ -181,6 +189,7 @@ public class LaneMain : MonoBehaviour
         frameScores.Clear();
         frameResults.Clear();
         ResetFrame();
+        scoreText.SetText("");
     }
 
 

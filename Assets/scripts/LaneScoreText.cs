@@ -24,6 +24,7 @@ public class LaneScoreText : MonoBehaviour
             if (results[i]==2) ss = $"{ss}**";
             else if (results[i]==1) ss = $"{ss}*";
             s += $"[{ss,-4}] ";
+            if (i==4) s += "\n";
         }
         //s += string.Format("\n({0})", current);
         tmp.text = s;
@@ -36,10 +37,10 @@ public class LaneScoreText : MonoBehaviour
         for(int i=0; i<scores.Count; i++)
         {
             scoreTotal += scores[i];
-            s += string.Format("{1}. [{0}", scores[i], i+1);
+            s += string.Format("{1}.\t{0}", scores[i], i+1);
             if (results[i]==2) s += " - strike!";
             else if (results[i]==1) s += " - spare";
-            s += "]\n";
+            s += "\n";
         }
         s += $"= {scoreTotal}";
         tmp.text = s;
